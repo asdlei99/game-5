@@ -2101,6 +2101,8 @@ int CMomentumGameMovement::TryPlayerMove(Vector *pFirstDest, trace_t *pFirstTrac
         //  for contact
         // Add it if it's not already in the list!!!
         MoveHelper()->AddToTouched(pm, mv->m_vecVelocity);
+        if (!CloseEnough(pm.plane.normal[2], 0.0f)) // Filter out staight walls
+            m_pPlayer->SetLastCollision(pm);
 
         // If the plane we hit has a high z component in the normal, then
         //  it's probably a floor
@@ -2418,6 +2420,7 @@ void CMomentumGameMovement::SetGroundEntity(trace_t *pm)
         {
             MoveHelper()->AddToTouched(*pm, mv->m_vecVelocity);
         }
+        m_pPlayer->SetLastCollision(*pm);
 
         mv->m_vecVelocity.z = 0.0f;
     }
